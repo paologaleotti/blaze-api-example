@@ -24,3 +24,6 @@ bin
 
 # Generated code
 generated*
+
+# Sqlite files
+*.db
