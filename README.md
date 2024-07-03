@@ -1,43 +1,37 @@
-# blaze
+# blaze example app
 
-![logo](https://github.com/paologaleotti/blaze/assets/45665769/a0c691df-b76b-4a4a-ac44-c622dd458352)
+This repo contains an example of a HTTP API built using the [blaze](https://github.com/paologaleotti/blaze) template.
 
-Simple and minimal Go template for building fast, simple and mantainable web services and backend applications.
+It features a simple CRUD API for managing todos, including:
 
-> [!IMPORTANT]
-> While blaze is already used and working flawlessly in production, it's still evolving and may have breaking changes in the future.
+- A basic blaze scaffolding (including logging, configuration, structure...)
+- Clean structure and dependency inversion
+- SQL data storage using SQLite and [sqlx](https://github.com/jmoiron/sqlx)
+- Database migrations [goose](https://github.com/pressly/goose)
 
-You can find the **full documentation** with examples [here](https://github.com/paologaleotti/blaze/wiki).
+## Running the application
 
-## Features
+Requirements:
+- Go >= 1.22
+- sqlite3
+- goose
 
-- Minimal and low overhead
-- Production ready
-- Simple and conventional structure
-- Fully compatible and base on standard [net/http](https://pkg.go.dev/net/http)
-- Strict linting with [golangci-lint](https://golangci-lint.run/)
-- Custom HTTP error handling
-- Request payload validation
-- Structured logging with [zerolog](https://github.com/rs/zerolog)
-- Full AWS Lambda support (see [serverless](https://github.com/paologaleotti/blaze/tree/feature/serverless) branch)
+Before running, export the required environment variables for the service (see `internal/api/env.go`) and for Goose (see `.env.template` for all needed env).
 
-All utilities are implemented in the `httpcore` and `util` package.
+To run the app, first create the database and apply the migrations:
 
-## Stack
-
-- **chi**: HTTP router (std net/http compatible)
-- **chi/middleware**: middleware and hooks
-- **validator/v10**: request body struct validation
-- **zerolog**: Structured logging
-
-## Get started
-
-You can start by reading the small [wiki](https://github.com/paologaleotti/blaze/wiki) with examples.
-
-To scaffold a new blaze project, simply run this command:
-
-```bash
-go run github.com/paologaleotti/blaze-cli@master
+```sh
+goose up
 ```
 
-This will use the [blaze-cli](https://github.com/paologaleotti/blaze-cli) to scaffold the project. You can also use the GitHub template or simply clone the repo.
+Then build and run the API:
+
+```sh
+make
+```
+
+```sh
+./bin/api/main
+```
+
+Done! The API will be available at `http://localhost:3000`.
