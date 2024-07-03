@@ -3,7 +3,11 @@ package api
 import (
 	"blaze/internal/api/handlers"
 	"blaze/pkg/httpcore"
+	"blaze/pkg/storage"
 	"blaze/pkg/util"
+
+	"github.com/rs/zerolog/log"
+
 	"net/http"
 	"time"
 
@@ -22,9 +26,14 @@ func InitService() http.Handler {
 	router.Use(middleware.Recoverer)
 	router.Use(httpcore.LoggerMiddleware)
 
-	// env := api.InitEnv() // get typed environment
+	env := InitEnv()
 
-	controller := handlers.NewApiController()
+	storage, err := storage.NewTodoStorage(env.DatabaseUrl)
+	if err != nil {
+		log.Fatal().Err(err).Msg("Could not initialize storage")
+	}
+
+	controller := handlers.NewApiController(storage)
 	applyRoutes(router, controller)
 
 	return router

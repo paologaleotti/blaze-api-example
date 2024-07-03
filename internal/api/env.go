@@ -3,11 +3,11 @@ package api
 import "blaze/pkg/util"
 
 type EnvConfig struct {
-	Environment string
+	DatabaseUrl string
 }
 
 var envVarMappings = util.EnvMapping{
-	"ENVIRONMENT": &env.Environment,
+	"DATABASE_URL": &env.DatabaseUrl,
 }
 
 var env = &EnvConfig{}

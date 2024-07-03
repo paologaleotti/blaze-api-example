@@ -6,20 +6,26 @@ import (
 	"errors"
 
 	"github.com/jmoiron/sqlx"
+	_ "github.com/mattn/go-sqlite3"
 )
 
 type TodoStorage struct {
 	client *sqlx.DB
 }
 
-func NewTodoStorage(client *sqlx.DB) *TodoStorage {
-	return &TodoStorage{client: client}
+func NewTodoStorage(dbUrl string) (*TodoStorage, error) {
+	client, err := sqlx.Open("sqlite3", dbUrl)
+	if err != nil {
+		return nil, err
+	}
+
+	return &TodoStorage{client: client}, nil
 }
 
 func (s *TodoStorage) GetTodos() ([]models.Todo, error) {
 	query := `SELECT id, title, completed FROM todos`
 
-	var todos []models.Todo
+	todos := []models.Todo{}
 	err := s.client.Select(&todos, query)
 	if err != nil {
 		return nil, err

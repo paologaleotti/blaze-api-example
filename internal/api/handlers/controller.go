@@ -1,13 +1,15 @@
 package handlers
 
-import "blaze/pkg/models"
+import (
+	"blaze/pkg/storage"
+)
 
 type ApiController struct {
-	db []*models.Todo
+	storage *storage.TodoStorage
 }
 
-func NewApiController() *ApiController {
+func NewApiController(storage *storage.TodoStorage) *ApiController {
 	return &ApiController{
-		db: make([]*models.Todo, 0),
+		storage: storage,
 	}
 }
