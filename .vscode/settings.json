@@ -1,0 +1,18 @@
+{
+	"editor.formatOnSave": true,
+	"explorer.compactFolders": false,
+	"editor.codeActionsOnSave": {
+		"source.organizeImports": "always"
+	},
+	"[yaml]": {
+		"editor.defaultFormatter": "redhat.vscode-yaml"
+	},
+	"go.useLanguageServer": true,
+	"go.lintTool": "golangci-lint",
+	"go.lintFlags": [
+		"--fast"
+	],
+	"conventionalCommits.scopes": [
+		"http"
+	]
+}
