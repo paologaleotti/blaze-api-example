@@ -7,7 +7,7 @@ It features a simple CRUD API for managing todos, including:
 - A basic blaze scaffolding (including logging, configuration, structure...)
 - Clean structure and dependency inversion
 - SQL data storage using SQLite and [sqlx](https://github.com/jmoiron/sqlx)
-- Database migrations [goose](https://github.com/pressly/goose)
+- Database migrations using [goose](https://github.com/pressly/goose)
 
 ## Running the application
 
