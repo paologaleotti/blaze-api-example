@@ -17,6 +17,7 @@ import (
 )
 
 func InitService() http.Handler {
+	env := InitEnv()
 	util.InitLogger()
 
 	router := chi.NewRouter()
@@ -26,7 +27,11 @@ func InitService() http.Handler {
 	router.Use(middleware.Recoverer)
 	router.Use(httpcore.LoggerMiddleware)
 
-	env := InitEnv()
+	if env.EnableMetrics {
+		InitMetrics()
+		router.Use(MetricsMiddleware)
+		router.Get("/metrics", MetricsHttpHandler())
+	}
 
 	storage, err := storage.NewTodoStorage(env.DatabaseUrl)
 	if err != nil {

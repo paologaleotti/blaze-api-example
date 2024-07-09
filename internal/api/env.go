@@ -3,19 +3,13 @@ package api
 import "blaze/pkg/util"
 
 type EnvConfig struct {
-	DatabaseUrl string
+	DatabaseUrl   string
+	EnableMetrics bool
 }
 
-var envVarMappings = util.EnvMapping{
-	"DATABASE_URL": &env.DatabaseUrl,
-}
-
-var env = &EnvConfig{}
-
-func InitEnv() *EnvConfig {
-	for key, goVar := range envVarMappings {
-		*goVar = util.GetEnvOrPanic(key)
+func InitEnv() EnvConfig {
+	return EnvConfig{
+		DatabaseUrl:   util.GetEnvOrPanic("DATABASE_URL"),
+		EnableMetrics: util.GetEnvOrDefault("ENABLE_METRICS", "") == "true",
 	}
-
-	return env
 }

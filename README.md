@@ -8,6 +8,7 @@ It features a simple CRUD API for managing todos, including:
 - Clean structure and dependency inversion
 - SQL data storage using SQLite and [sqlx](https://github.com/jmoiron/sqlx)
 - Database migrations using [goose](https://github.com/pressly/goose)
+- Full Prometheus metrics instrumentation (enabled by environment variable)
 
 ## Running the application
 
@@ -35,3 +36,4 @@ make
 ```
 
 Done! The API will be available at `http://localhost:3000`.
+Prometheus metrics will be available at `http://localhost:3000/metrics`.
