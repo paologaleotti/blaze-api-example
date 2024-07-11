@@ -11,7 +11,7 @@ import (
 )
 
 func (c *ApiController) GetTodos(w http.ResponseWriter, r *http.Request) (any, int) {
-	todos, err := c.storage.GetTodos()
+	todos, err := c.storage.GetTodos(r.Context())
 	if err != nil {
 		return httpcore.ErrUnkownInternal.With(err), http.StatusInternalServerError
 	}
@@ -21,7 +21,7 @@ func (c *ApiController) GetTodos(w http.ResponseWriter, r *http.Request) (any, i
 func (c *ApiController) GetTodo(w http.ResponseWriter, r *http.Request) (any, int) {
 	id := r.PathValue("id")
 
-	todo, err := c.storage.GetTodoById(id)
+	todo, err := c.storage.GetTodoById(r.Context(), id)
 	if err != nil {
 		if errors.Is(err, storage.ErrTodoNotFound) {
 			return httpcore.ErrNotFound, http.StatusNotFound
@@ -44,7 +44,7 @@ func (c *ApiController) CreateTodo(w http.ResponseWriter, r *http.Request) (any,
 		Completed: false,
 	}
 
-	err = c.storage.CreateTodo(todo)
+	err = c.storage.CreateTodo(r.Context(), todo)
 	if err != nil {
 		return httpcore.ErrUnkownInternal.With(err), http.StatusInternalServerError
 	}

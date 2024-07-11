@@ -2,6 +2,7 @@ package storage
 
 import (
 	"blaze/pkg/models"
+	"context"
 	"database/sql"
 	"errors"
 
@@ -22,25 +23,25 @@ func NewTodoStorage(dbUrl string) (*TodoStorage, error) {
 	return &TodoStorage{client: client}, nil
 }
 
-func (s *TodoStorage) GetTodos() ([]models.Todo, error) {
+func (s *TodoStorage) GetTodos(ctx context.Context) ([]models.Todo, error) {
 	query := `SELECT id, title, completed FROM todos`
 
 	todos := []models.Todo{}
-	err := s.client.Select(&todos, query)
+	err := s.client.SelectContext(ctx, &todos, query)
 	if err != nil {
 		return nil, err
 	}
 	return todos, nil
 }
 
-func (s *TodoStorage) GetTodoById(id string) (models.Todo, error) {
+func (s *TodoStorage) GetTodoById(ctx context.Context, id string) (models.Todo, error) {
 	query := `
 		SELECT id, title, completed 
 		FROM todos WHERE id = ?
 	`
 
 	todo := models.Todo{}
-	err := s.client.Get(&todo, query, id)
+	err := s.client.GetContext(ctx, &todo, query, id)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return models.Todo{}, ErrTodoNotFound
@@ -50,29 +51,29 @@ func (s *TodoStorage) GetTodoById(id string) (models.Todo, error) {
 	return todo, nil
 }
 
-func (s *TodoStorage) CreateTodo(newTodo models.Todo) error {
+func (s *TodoStorage) CreateTodo(ctx context.Context, newTodo models.Todo) error {
 	query := `
 		INSERT INTO todos (id, title, completed) 
 		VALUES (:id, :title, :completed)
 	`
 
-	_, err := s.client.NamedExec(query, &newTodo)
+	_, err := s.client.NamedExecContext(ctx, query, &newTodo)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-func (s *TodoStorage) UpdateTodoStatus(id string, completed bool) error {
+func (s *TodoStorage) UpdateTodoStatus(ctx context.Context, id string, completed bool) error {
 	query := `UPDATE todos SET completed = ? WHERE id = ?`
 
-	_, err := s.client.Exec(query, completed, id)
+	_, err := s.client.ExecContext(ctx, query, completed, id)
 	return err
 }
 
-func (s *TodoStorage) DeleteTodoById(id string) error {
+func (s *TodoStorage) DeleteTodoById(ctx context.Context, id string) error {
 	query := `DELETE FROM todos WHERE id = ?`
 
-	_, err := s.client.Exec(query, id)
+	_, err := s.client.ExecContext(ctx, query, id)
 	return err
 }

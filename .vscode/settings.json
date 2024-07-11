@@ -14,5 +14,15 @@
 	],
 	"conventionalCommits.scopes": [
 		"http"
+	],
+	"sqltools.useNodeRuntime": true,
+	"sqltools.connections": [
+		{
+			"previewLimit": 50,
+			"driver": "SQLite",
+			"name": "asd",
+			"group": "asd",
+			"database": "${workspaceFolder:blaze-api-example}/todos.db"
+		}
 	]
 }
